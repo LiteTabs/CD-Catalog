@@ -1,0 +1,1 @@
+cp cd-catalog.desktop ~/.local/share/applications/cd-catalog.desktop

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=CD Catalog
+Comment=Catalog your CDs and vinyl records
+Exec=/home/litetabs/CD_Catalog/cd_catalog_gtk.py
+Icon=/home/litetabs/CD_Catalog/icon.png
+Terminal=false
+Type=Application
+Categories=AudioVideo;Utility;
