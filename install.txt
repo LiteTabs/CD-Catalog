@@ -1,1 +1,5 @@
+Edit 'cd-catalog.desktop' 
+Exec=/home/user/path-to-save/CD_Catalog/cd_catalog_gtk.py
+Icon=/home/user/path-to-save/CD_Catalog/icon.png
+
 cp cd-catalog.desktop ~/.local/share/applications/cd-catalog.desktop
