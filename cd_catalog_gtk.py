@@ -32,7 +32,6 @@ class CDCatalogApp:
         input_box.set_margin_start(10)
         input_box.set_margin_end(10)
 
-        # Поле "Группа"
         band_box = Gtk.Box(spacing=6)
         band_label = Gtk.Label(label="Группа:")
         self.band_entry = Gtk.Entry()
@@ -41,7 +40,6 @@ class CDCatalogApp:
         band_box.append(self.band_entry)
         input_box.append(band_box)
 
-        # Поле "Альбом"
         album_box = Gtk.Box(spacing=6)
         album_label = Gtk.Label(label="Альбом:")
         self.album_entry = Gtk.Entry()
@@ -50,7 +48,6 @@ class CDCatalogApp:
         album_box.append(self.album_entry)
         input_box.append(album_box)
 
-        # Кнопка "Добавить"
         add_button = Gtk.Button(label="Добавить")
         add_button.connect("clicked", self.on_add_clicked)
         input_box.append(add_button)
@@ -109,6 +106,11 @@ class CDCatalogApp:
         delete_box.append(delete_button)
         save_box.append(delete_box)
 
+        # Кнопка экспорта
+        export_button = Gtk.Button(label="Экспорт в TXT")
+        export_button.connect("clicked", self.on_export_clicked)
+        save_box.append(export_button)
+
         # Кнопка сохранения
         save_button = Gtk.Button(label="Сохранить каталоги")
         save_button.connect("clicked", self.on_save_clicked)
@@ -143,7 +145,7 @@ class CDCatalogApp:
 
     def delete_entry(self, catalog, view, entry):
         try:
-            index = int(entry.get_text().strip()) - 1  # Нумерация с 1
+            index = int(entry.get_text().strip()) - 1
             if index < 0:
                 raise ValueError("Номер должен быть положительным!")
             flat_list = [(band, album) for band in catalog for album in catalog[band]]
@@ -160,6 +162,23 @@ class CDCatalogApp:
             self.show_message("Ошибка", str(e) if str(e) else "Введите корректный номер записи!")
         except Exception as e:
             self.show_message("Ошибка", f"Ошибка при удалении: {e}")
+
+    def export_to_txt(self, catalog, filename):
+        try:
+            with open(filename, 'w', encoding='utf-8') as f:
+                if not catalog:
+                    f.write("Каталог пуст!\n")
+                else:
+                    f.write("Каталог:\n" + "-" * 40 + "\n")
+                    index = 1
+                    for band in catalog:
+                        for album in catalog[band]:
+                            f.write(f"{index}. {band} - {album}\n")
+                            index += 1
+                    f.write("-" * 40 + "\n")
+            self.show_message("Успех", f"Каталог экспортирован в {filename}")
+        except Exception as e:
+            self.show_message("Ошибка", f"Ошибка при экспорте: {e}")
 
     def update_view(self, catalog, view):
         buffer = view.get_buffer()
@@ -229,6 +248,13 @@ class CDCatalogApp:
             self.delete_entry(self.cd_catalog, self.cd_view, self.delete_entry)
         else:  # Vinyl вкладка
             self.delete_entry(self.vinyl_catalog, self.vinyl_view, self.delete_entry)
+
+    def on_export_clicked(self, button):
+        current_page = self.notebook.get_current_page()
+        if current_page == 0:  # CD вкладка
+            self.export_to_txt(self.cd_catalog, "cd_catalog.txt")
+        else:  # Vinyl вкладка
+            self.export_to_txt(self.vinyl_catalog, "vinyl_catalog.txt")
 
     def on_save_clicked(self, button):
         cd_saved = self.save_catalog(self.cd_catalog, self.cd_filename)
