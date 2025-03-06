@@ -1,0 +1,4 @@
+3
+Компакт-диски cd_catalog.json
+Винил vinyl_catalog.json
+Детские пластинки kids_catalog.json
