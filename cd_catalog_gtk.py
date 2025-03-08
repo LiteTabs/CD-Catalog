@@ -15,7 +15,7 @@ class CDCatalogApp:
         self.base_dir = os.path.dirname(os.path.abspath(__file__))
         self.config_file = os.path.join(self.base_dir, "config.txt")
         self.tabs = self.load_config()
-        self.app = Gtk.Application(application_id="org.example.cdcatalog")
+        self.app = Gtk.Application(application_id="com.example.CDCatalog")
         self.app.connect("activate", self.on_activate)
 
     def load_config(self):
@@ -57,7 +57,7 @@ class CDCatalogApp:
         self.window = Gtk.ApplicationWindow(application=app)
         self.window.set_title("Каталог музыки")
         self.window.set_default_size(600, 1000)
-
+                
         main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.window.set_child(main_box)
 
